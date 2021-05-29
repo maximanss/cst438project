@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h2>Car type Name</h2>
+	<br/>
+	<table>
+		<tr>
+			<th>Type ID</th>
+			<th>Type Name</th>
+
+		</tr>
+
+		<tr th:each="type : ${cartypes}">
+			<td th:text="${type.cartypeid}"></td>
+			<td th:text="${type.cartypename}"></td>
+
+		</tr>
+
+	</table>
+</body>
+</html>

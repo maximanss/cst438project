@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Car List</title>
+</head>
+<body>
+	<h2>All Car Listing</h2>
+	<br/>
+	<table>
+		<tr>
+			<th>ID</th>
+			<th>Type</th>
+			<th>Description</th>
+			<th>Capacity</th>
+			<th>Image name</th>
+			<th>Daily Price</th>
+			<th>Weekly Price</th>
+		
+		</tr>
+
+		<tr th:each="car : ${cars}">
+			<td th:text="${car.carid}"></td>
+			<td th:text="${car.cartype?.cartypename}"></td>
+			<td th:text="${car.description}"></td>
+			<td th:text="${car.maxpassengers}"></td>
+			<td th:text="${car.image}"></td>
+			<td th:text="${car.dailyprice}"></td>
+			<td th:text="${car.weeklyprice}"></td>
+		</tr>
+
+	</table>
+</body>
+</html>
