@@ -17,9 +17,6 @@ public class TestDomain {
     @Autowired
     CarRepository carRepository;
     
-    
-    
-    
 
     /**
      * Response to user request like URL localhost:8080/cars
@@ -78,5 +75,7 @@ public class TestDomain {
         model.addAttribute("bookings", bookings);
         return "reservation";
     }
+    
+    
     
 }

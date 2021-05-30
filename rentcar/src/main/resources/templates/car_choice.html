@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Car Choices</title>
+<link th:href="@{/styles/car_choice.css}" rel="stylesheet" />
+</head>
+<body>
+	<h2>Select A Car to Rent</h2>
+	<br/>
+	<div>
+		<form th:action="@{/car/select}" th:object="${cars}" method="post">
+			<table class="center">
+				<tr th:each="car : ${cars}">
+				<td th:text="${car.cartype?.cartypename}" width="20"></td>
+				<td>
+					<div>
+				 		<p># Passengers</p>
+				 		<p th:text="${car.maxpassengers}"></p>
+				 	</div>
+				</td>
+				<td>
+					<div class="detail">
+						<img th:src="@{|/images/${car.image}|}" width="300" />
+						<p th:text="${car.description}" ></p>
+					</div>
+				</td>
+				<td>
+					<div>
+						<p>Daily Price</p>
+						<p>$<span th:text="${car.dailyprice}"></span></p>
+					</div>
+				</td>
+				
+				<td>
+					<div>
+						<p>Weekly Price</p>
+						<p>$<span th:text="${car.weeklyprice}"></span></p>
+					</div>
+				</td>
+				
+				</tr>
+			</table>
+		</form>
+	</div>
+
+</body>
+</html>
