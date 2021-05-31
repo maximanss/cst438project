@@ -9,8 +9,12 @@
 	<h2>Select A Car to Rent</h2>
 	<br/>
 	<div>
-		<form th:action="@{/car/select}" th:object="${cars}" method="post">
-			<table class="center">
+		<form th:action="@{/cst438.carrentals.com/select}" th:object="${cars}" method="post">
+			<input type="hidden" id="userid" name="userid" th:value="${userid}" />
+			<input type="hidden" id="startdate" name="startdate" th:value="${startdate}" />
+			<input type="hidden" id="enddate" name="enddate" th:value="${enddate}" />
+			
+ 			<table class="center">
 				<tr th:each="car : ${cars}">
 				<td th:text="${car.cartype?.cartypename}" width="20"></td>
 				<td>
@@ -29,6 +33,7 @@
 					<div>
 						<p>Daily Price</p>
 						<p>$<span th:text="${car.dailyprice}"></span></p>
+						<button type=submit name="daily" th:value="${car.carid}" >Select</button>
 					</div>
 				</td>
 				
@@ -36,6 +41,7 @@
 					<div>
 						<p>Weekly Price</p>
 						<p>$<span th:text="${car.weeklyprice}"></span></p>
+						<button type=submit name="weekly" th:value="${car.carid}" >Select</button>
 					</div>
 				</td>
 				
