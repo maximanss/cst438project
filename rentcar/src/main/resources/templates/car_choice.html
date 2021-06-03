@@ -3,18 +3,18 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Car Choices</title>
+<link rel="stylesheet"
+ href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+ integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+ crossorigin="anonymous">
 <link th:href="@{/styles/car_choice.css}" rel="stylesheet" />
 </head>
 <body>
-	<h2>Select A Car to Rent</h2>
+	<h3>Select A Car to Rent at <span th:text="${reservation.location}"></span></h3>
 	<br/>
 	<div>
-		<form th:action="@{/cst438.carrentals.com/select}" th:object="${cars}" method="post">
-			<input type="hidden" id="userid" name="userid" th:value="${userid}" />
-			<input type="hidden" id="startdate" name="startdate" th:value="${startdate}" />
-			<input type="hidden" id="enddate" name="enddate" th:value="${enddate}" />
-			
- 			<table class="center">
+		<form action="#" th:action="@{/cst438.carrentals.com/select}" method="post">
+			<table class="center">
 				<tr th:each="car : ${cars}">
 				<td th:text="${car.cartype?.cartypename}" width="20"></td>
 				<td>
@@ -30,21 +30,33 @@
 					</div>
 				</td>
 				<td>
+					<div class = "price">
+						<div class="price_detail" >
+							<p>Daily Price</p>
+							<p>$<span th:text="${car.dailyprice}"></span></p>
+						</div>
+						<div class="price_detail">
+							<p>Weekly Price</p>
+							<p>$<span th:text="${car.weeklyprice}"></span></p>
+						</div>
+						
+					</div>
 					<div>
-						<p>Daily Price</p>
-						<p>$<span th:text="${car.dailyprice}"></span></p>
-						<button type=submit name="daily" th:value="${car.carid}" >Select</button>
+						<button class="btn btn-primary" type=submit name="selection" th:value="${car.carid}" >Select</button>
 					</div>
 				</td>
 				
+				<!--
 				<td>
 					<div>
 						<p>Weekly Price</p>
 						<p>$<span th:text="${car.weeklyprice}"></span></p>
+						
 						<button type=submit name="weekly" th:value="${car.carid}" >Select</button>
+						
 					</div>
 				</td>
-				
+				-->
 				</tr>
 			</table>
 		</form>
