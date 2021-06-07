@@ -2,7 +2,7 @@
 <html xmlns:th="www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>CarRent</title>
 </head>
 <body>
 <h2>Reservation</h2>
@@ -14,7 +14,6 @@
 			<th>Start Date</th>
 			<th>End Date</th>
 			<th>User ID</th>
-			<th>Company ID</th>
 			<th>Total Price</th>
 			
 		</tr>
@@ -25,7 +24,6 @@
 			<td th:text="${booking.startdate}"></td>
 			<td th:text="${booking.enddate}"></td>
 			<td th:text="${booking.userid}"></td>
-			<td th:text="${booking.companyid}"></td>
 			<td th:text="${booking.totalprice}"></td>
 		</tr>
 

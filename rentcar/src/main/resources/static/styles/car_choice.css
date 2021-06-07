@@ -1,9 +1,8 @@
 @charset "ISO-8859-1";
 
-h2 {
-    font-family: sans-serif;
-    font-size: 1.5em;
-    text-transform: uppercase;
+h3 {
+    text-align: center;
+    padding:10px;
 }
 
 strong {
@@ -25,7 +24,30 @@ table, th, td {
 	max-width: 350px;
 }
 
-table.center {
+.center {
   margin-left: auto; 
   margin-right: auto;
+  text-align: center;
+}
+
+.confirm_buttons {
+	text-align: center;
+	padding: 10px;
+	margin: 5px;
+}
+
+.divider{
+    width:15px;
+    height:auto;
+    display:inline-block;
+}
+
+.price {
+	display: flex;
+	margin: 10px;
+}
+.price_detail {
+	border: 1px solid orange;
+	margin: 10px;
+	padding:5px;
 }

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+
+<!-- Adding bootstrap -->
+<meta charset="ISO-8859-1">
+<title>Select Your Trip</title>
+<link rel="stylesheet"
+ href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+ integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+ crossorigin="anonymous">
+ </head>
+ 
+<body>
+<div
+  
+  style="
+    background-image: url('https://www.wallpaperflare.com/static/712/821/216/chevrolet-camaro-old-car-road-blue-cars-wallpaper.jpg');
+    position: absolute; 
+  background-repeat: no-repeat; 
+  background-attachment: fixed; 
+  background-position: center;
+  height: 100vh;
+  width: 100vw;
+  "
+>
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">CarRent</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link" href="#">About us</a>
+      <a class="nav-item nav-link" href="#">Register</a>
+      <a class="nav-item nav-link disabled" href="#">Login</a>
+    </div>
+  </div>
+</nav>
+
+	<div style="margin: 0 0px 0px 18px; color:black; font-size:1em;">
+	<form action="#" th:action="@{/cst438.carrentals.com/carchoice}" th:object="${reservation}" method="post"><br/>
+		<div class="control-label" style="width:35%;">
+			Location: <br/><select th:field="*{location}">
+			<option th:value="'Select'" th:text="Select"></option>
+		    <option th:value="'Boston'" th:text="Boston"></option>
+		    <option th:value="'Miami'" th:text="Miami"></option>
+		    <option th:value="'Riverside'" th:text="Riverside"></option>
+		    <option th:value="'San Diego'" th:text="San+' '+Diego"></option>
+			</select><br /><br />
+		</div>
+		<div class="form-group" style="width:35%;"> <!-- Date input -->
+	        <label class="control-label" for="date">Start Date</label>
+	        <input class="form-control" id="date" name="date" type="date" th:field="*{startdate}"/>
+	        <span th:if="${#fields.hasErrors('startdate')}" th:errors="*{startdate}"> </span> 
+	     </div>
+	      
+	     <div class="form-group" style="width:35%;"> <!-- Date input -->
+	        <label class="control-label" for="date">End Date</label>
+	        <input class="form-control" id="date" name="date" type="date" th:field="*{enddate}"/>
+	        <span th:if="${#fields.hasErrors('enddate')}" th:errors="*{enddate}"> </span> 
+	     </div>
+		
+		<!-- 	
+		End Date: <input type="date"  th:field="*{enddate}" />
+		    <span th:if="${#fields.hasErrors('enddate')}" th:errors="*{enddate}"> </span> <br />  <br /> -->
+		    
+		    
+		    
+		    <div class="form-group"> <!-- Submit button -->
+	        <button class="btn btn-primary " name="submit" type="submit">Submit</button>
+	      </div>
+		<!-- <input type="submit" value="Submit" /> -->
+		
+		
+		
+	</form>
+	</div>
+	</div>
+	
+</body>
+</html>

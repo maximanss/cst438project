@@ -3,11 +3,59 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Car Confirm</title>
+<link rel="stylesheet"
+ href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+ integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+ crossorigin="anonymous">
 <link th:href="@{/styles/car_choice.css}" rel="stylesheet" />
 </head>
 <body>
-	<h2>Confirm or Cancel Car Selection</h2>
-	<p th:text="${msg}"></p>
+	<h3>Review and Confirm Car Reservation</h3>
+	<div>
+		<form action="#" th:action="@{/cst438.carrentals.com/confirm}" method="post">
+			<table class="center">
+				<tr>
+					<td>User Name</td>
+					<td th:text="${user.name}"></td>
+				</tr>
+				<tr>
+					<td>Pickup Location </td>
+					<td th:text="${reservation.location}"></td>
+				</tr>
+				<tr>
+					<td>Start Date </td>
+					<td th:text="${reservation.startdate}"></td>
+				</tr>
+				<tr>
+					<td>End Date </td>
+					<td th:text="${reservation.enddate}"></td>
+				</tr>
+				<tr>
+					<td>Car Type </td>
+					<td th:text="${car.cartype?.cartypename}"></td>
+				</tr>
+			 	<tr>
+			 		<td># Passengers </td>
+				 	<td th:text="${car.maxpassengers}"></td>
+				 	
+				</tr>
+				<tr>
+					<td>Car Description</td>
+					<td th:text="${car.description}" width="300"></td>
+					
+				</tr>
+				<tr>
+					<td>Total Price</td>
+					<td th:inline="text">$[[${reservation.totalprice}]]</td>
+				</tr>		
+			</table>
+			<div class="confirm_buttons">
+				<button class="btn btn-success" type=submit name="confirm" th:value="yes" >Confirm</button>
+				<span class="divider"></span>
+				<button class="btn btn-danger" type=submit name="confirm" th:value="no" >Cancel</button>
+			</div>
+		</form>
+	</div>
 
 </body>
 </html>
