@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Car Rental</title>
+<link rel="stylesheet"
+ href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+ integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+ crossorigin="anonymous">
+ <link th:href="@{/styles/car_choice.css}" rel="stylesheet" />
+ 
+<body>
+	<div>
+		<h3>Cancellation of Car Reservation</h3><br/>
+			<form action="#" th:action="@{/cst438.carrentals.com/cancel}" th:object="${cancellation}" method="post">
+				<div class="center">
+					
+					<div>
+						Email Address: <input type="text" size="50" th:field="*{emailAddress}" /> 
+	    				<span th:if="${#fields.hasErrors('emailAddress')}" th:errors="*{emailAddress}"> </span> <br />
+	    				
+					</div>
+					<br/>
+					<div>
+						Reservation Number: <input type="text" size="10" th:field="*{reserveNum}" /> 
+	    				<span th:if="${#fields.hasErrors('reserveNum')}" th:errors="*{reserveNum}"> </span> <br />
+					</div>
+					
+				</div>
+				<br/>
+				<div class="confirm_buttons">
+				<button class="btn btn-success" type=submit name="confirm" th:value="yes" >Confirm</button>
+				<span class="divider"></span>
+				<button class="btn btn-danger" type=submit name="confirm" th:value="no" >Abort</button>
+				<br/> <br/>
+				<div>
+					<p style="background-color:yellow" th:if="${error}" th:text="${error}"></p>
+    			</div>
+    			
+			</form>
+		</div>
+</body>
+</html>
