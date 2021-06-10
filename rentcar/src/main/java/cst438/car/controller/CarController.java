@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +22,7 @@ import cst438.car.service.CarService;
 import cst438.car.domain.*;
 
 @Controller
-@SessionAttributes({"reservation"})
+@SessionAttributes({"reservation", "cancellation"})
 public class CarController {
     
     @Autowired
@@ -30,6 +31,11 @@ public class CarController {
     @ModelAttribute
     public Reservation getNewReservation() {
         return new Reservation();
+    }
+    
+    @ModelAttribute
+    public Cancellation getNewCancellation() {
+        return new Cancellation();
     }
     
     // Home page of URL like: web-hosting-sitename/cst438.carrentals.com
@@ -124,6 +130,43 @@ public class CarController {
          */
         System.out.println("Reservation is Done!");
         reservation = new Reservation(reservation.getUserid());
+        return "date_selection";
+    }
+    
+    // Cancellation page to allow user to cancel car reservation
+    @GetMapping("/cst438.carrentals.com/cancel")
+    public String displayCancellation(Model model) {
+        return "car_cancel";
+    }
+    
+    @PostMapping("/cst438.carrentals.com/cancel")
+    public String processCancellation(@Valid Cancellation cancellation, 
+            BindingResult result,
+            @RequestParam("confirm") String confirm,
+            Model model) {
+        System.out.println("Email Address:"+ cancellation.getEmailAddress() + 
+                " Reservation Number:" + cancellation.getReserveNum());
+        if (!confirm.equals("yes")) {
+            System.out.println("Aborted!");
+            return "date_selection";
+        } else {
+            if (result.hasErrors()) {
+                return "car_cancel";
+            }
+            if (carService.cancelUserReservation(cancellation.getEmailAddress(), 
+                    cancellation.getReserveNum())) {
+                return "cancel_confirm";
+            } else {
+                String error_msg = "Reservation Not Found!";
+                System.out.println(error_msg);
+                model.addAttribute("error", error_msg);
+                return "car_cancel";
+            }
+        }
+    }
+    
+    @PostMapping("/cst438.carrentals.com/cancel_confirm")
+    public String confirmCancellation(Model model) {
         return "date_selection";
     }
 

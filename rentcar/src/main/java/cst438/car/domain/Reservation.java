@@ -114,5 +114,57 @@ public class Reservation {
                 + companyid + ", totalprice=" + totalprice + ", location=" + location + "]";
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (int) (carid ^ (carid >>> 32));
+        result = prime * result + (int) (companyid ^ (companyid >>> 32));
+        result = prime * result + ((enddate == null) ? 0 : enddate.hashCode());
+        result = prime * result + ((location == null) ? 0 : location.hashCode());
+        result = prime * result + (int) (reserveid ^ (reserveid >>> 32));
+        result = prime * result + ((startdate == null) ? 0 : startdate.hashCode());
+        result = prime * result + Float.floatToIntBits(totalprice);
+        result = prime * result + (int) (userid ^ (userid >>> 32));
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Reservation other = (Reservation) obj;
+        if (carid != other.carid)
+            return false;
+        if (companyid != other.companyid)
+            return false;
+        if (enddate == null) {
+            if (other.enddate != null)
+                return false;
+        } else if (!enddate.equals(other.enddate))
+            return false;
+        if (location == null) {
+            if (other.location != null)
+                return false;
+        } else if (!location.equals(other.location))
+            return false;
+        if (reserveid != other.reserveid)
+            return false;
+        if (startdate == null) {
+            if (other.startdate != null)
+                return false;
+        } else if (!startdate.equals(other.startdate))
+            return false;
+        if (Float.floatToIntBits(totalprice) != Float.floatToIntBits(other.totalprice))
+            return false;
+        if (userid != other.userid)
+            return false;
+        return true;
+    }
+
     
 }
