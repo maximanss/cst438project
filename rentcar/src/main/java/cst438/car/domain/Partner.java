@@ -2,8 +2,10 @@ package cst438.car.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 
 @Entity
@@ -11,11 +13,14 @@ import javax.persistence.Table;
 public class Partner {
     
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private long companyid;
     
-    private String name;
-    private float discountrate;
+    @NotNull
+    private String name = "";
+    
+    @NotNull
+    private float discountrate = (float)1.0;
     
     public Partner() {
     }
