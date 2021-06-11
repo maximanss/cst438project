@@ -101,6 +101,7 @@ public class CarController {
         System.out.println("Confirmation:" + confirm);
         if (confirm.equals("yes")) {
             System.out.println("Confirmed!");
+            reservation.setReserveid(0);  // make sure adding reservation not update
             reservation = carService.saveReservation(reservation);
             return "car_reserve";
         } else {
@@ -119,9 +120,6 @@ public class CarController {
          * make reservation by saving in the db and can the confirmed reservation #
          */
         System.out.println("Reservation is Done!");
-        Long id = reservation.getReserveid();
-        // reuse the same reservation but with different reserve id
-        reservation.setReserveid(id + 1);
         return "date_selection";
     }
     
