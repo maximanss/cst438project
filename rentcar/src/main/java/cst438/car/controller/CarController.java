@@ -69,10 +69,14 @@ public class CarController {
         System.out.println("Daily Car is Selected, with car id:" + carid);
         System.out.println("location:" + reservation.getLocation() +
                 " start date:" + reservation.getStartdate() + " end date:" + reservation.getEnddate());
+        
+        reservation.setCarid(carid);
         if (reservation.getUserid() == 0) {
             System.out.println("Require User to Log in");
+            
             //following are temporary, remove them when log in is ready
-            reservation.setUserid(1);
+            User tempUser = carService.getUserInfoByEmail("bob@gmail.com");
+            reservation.setUserid(tempUser.getUserid());
             
         } 
         
@@ -84,21 +88,7 @@ public class CarController {
         return "car_confirm";
     }
     
-    /**
-    @RequestMapping(value="/cst438.carrentals.com/select", method=RequestMethod.POST, params="weekly")
-    public String selectWeeklyCar(
-            @RequestParam(value="weekly") String carid,
-            @RequestParam(value="userid") String userid,
-            @RequestParam(value="startdate") String start,
-            @RequestParam(value="enddate") String end,
-            Model model) {
-        System.out.println("Weekly Car is selected");
-        String msg = carid + userid + start + end;
-        model.addAttribute("msg", msg);
-        return "car_confirm";
-    }
-    */
-    
+        
     @PostMapping("/cst438.carrentals.com/confirm")
     public String displayConfirmation(@Valid Reservation reservation,
             BindingResult result,
@@ -129,7 +119,9 @@ public class CarController {
          * make reservation by saving in the db and can the confirmed reservation #
          */
         System.out.println("Reservation is Done!");
-        reservation = new Reservation(reservation.getUserid());
+        Long id = reservation.getReserveid();
+        // reuse the same reservation but with different reserve id
+        reservation.setReserveid(id + 1);
         return "date_selection";
     }
     

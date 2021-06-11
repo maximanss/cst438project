@@ -2,8 +2,10 @@ package cst438.car.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 
 @Entity
@@ -11,13 +13,23 @@ import javax.persistence.Table;
 public class User {
     
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private long userid;
-    private String emailaddress;
-    private String name;
-    private String password;
-    private int creditnumber;
-    private String address;
+    
+    @NotNull
+    private String emailaddress = "";
+    
+    @NotNull
+    private String name = "";
+    
+    @NotNull
+    private String password = "";
+    
+    @NotNull
+    private int creditnumber =0;
+    
+    @NotNull
+    private String address = "";
     
     public User() {
     }

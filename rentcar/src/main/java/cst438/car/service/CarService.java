@@ -100,6 +100,16 @@ public class CarService {
         }
     }
     
+    // return null if no users found with the email
+    public User getUserInfoByEmail(String email) {
+        List<User> users = userRepository.findByEmailaddress(email);
+        if (users.size() > 0) {
+            return users.get(0);
+        } else {
+            return null;
+        }
+    }
+    
     public void setTotalPrice(Reservation reservation, Car car) {
         Long numOfDays = ChronoUnit.DAYS.between(
                 reservation.getStartdate().toLocalDate(), 

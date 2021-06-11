@@ -5,22 +5,34 @@ import java.sql.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "reservation")
 public class Reservation {
     
     @Id
     @GeneratedValue
     private long reserveid;
     
-    private long carid;
+    @NotNull
+    private long carid = 0;
+    
+    @NotNull
     private Date startdate;
-    private Date enddate;   
+    
+    @NotNull
+    private Date enddate;
+    
+    @NotNull
     private long userid;
-    private long companyid;
-    private float totalprice;
+    
+    @NotNull
+    private long companyid=0;
+    
+    @NotNull
+    private float totalprice = (float) 0.0;
+    
+    @NotNull
     private String location;
     
     public Reservation() {

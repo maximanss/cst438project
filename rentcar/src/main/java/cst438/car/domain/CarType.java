@@ -11,7 +11,9 @@ public class CarType {
 
     @Id
     private int cartypeid;
-    private String cartypename;
+    
+    @NotNull
+    private String cartypename = "";
 
 
     public CarType() {
