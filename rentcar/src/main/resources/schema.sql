@@ -1,14 +1,22 @@
+
 --
 -- Table structure 
 --
+DROP TABLE IF EXISTS inventory;
 DROP TABLE IF EXISTS cartype;
+DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS partner;
+DROP TABLE IF EXISTS reservation;
+
+
+
 CREATE TABLE cartype (
 	carTypeID INT NOT NULL,
 	carTypeName VARCHAR(40) NOT NULL DEFAULT '',
 	CONSTRAINT cartype_pk PRIMARY KEY (carTypeID)
 );
 
-DROP TABLE IF EXISTS inventory;
+
 CREATE TABLE inventory (
 	carID BIGINT NOT NULL AUTO_INCREMENT,
 	carTypeID INT NOT NULL,
@@ -23,7 +31,7 @@ CREATE TABLE inventory (
 	CONSTRAINT inventory_fk_type FOREIGN KEY (carTypeID) REFERENCES cartype (carTypeID)
 );
 
-DROP TABLE IF EXISTS user;
+
 CREATE TABLE user (
 	userID BIGINT NOT NULL AUTO_INCREMENT,
 	emailAddress VARCHAR(50) NOT NULL,
@@ -34,7 +42,6 @@ CREATE TABLE user (
 	CONSTRAINT user_pk PRIMARY KEY (userID)
 );
 
-DROP TABLE IF EXISTS partner;
 CREATE TABLE partner (
 	companyID BIGINT NOT NULL AUTO_INCREMENT,
 	name VARCHAR(50) NOT NULL,
@@ -42,7 +49,6 @@ CREATE TABLE partner (
 	CONSTRAINT partner_pk PRIMARY KEY (companyID)
 );
 
-DROP TABLE IF EXISTS reservation;
 CREATE TABLE reservation (
 	reserveID BIGINT NOT NULL AUTO_INCREMENT,
 	carID BIGINT NOT NULL,
@@ -55,3 +61,4 @@ CREATE TABLE reservation (
 	CONSTRAINT reservation_pk PRIMARY KEY (reserveID)
 	
 );
+
