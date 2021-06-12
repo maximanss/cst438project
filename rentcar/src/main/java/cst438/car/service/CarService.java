@@ -127,6 +127,8 @@ public class CarService {
         }
     }
     
+   
+    
     // create a new reservation in the repository
     public Reservation saveReservation(Reservation reservation) {
         return reservationRepository.save(reservation);
@@ -149,4 +151,15 @@ public class CarService {
         }
         return false; // fail since the reservation not exist
     }
+
+	public ArrayList<Date> getStartDateByLocation(String location) {
+		// TODO Auto-generated method stub
+		return reservationRepository.findStartDateByLocation(location);
+	}
+
+	public ArrayList<Date> getRentalEndDate(Date date) {
+		// TODO Auto-generated method stub
+		return reservationRepository.findRentalEndDate(date);
+	}
 }
+
