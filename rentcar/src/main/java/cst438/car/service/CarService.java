@@ -157,9 +157,15 @@ public class CarService {
 		return reservationRepository.findStartDateByLocation(location);
 	}
 
-	public ArrayList<Date> getRentalEndDate(Date date) {
+	public ArrayList<Date> getEndDateByLocation(String location) {
 		// TODO Auto-generated method stub
-		return reservationRepository.findRentalEndDate(date);
+		return reservationRepository.findEndDateByLocation(location);
 	}
+	
+	public Float getTotalCost(int carid) {
+		return reservationRepository.findTotalCostById(carid);
+	}
+
+	
 }
 

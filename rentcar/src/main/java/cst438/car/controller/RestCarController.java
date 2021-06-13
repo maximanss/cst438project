@@ -20,15 +20,19 @@ public class RestCarController {
 	@GetMapping("/getStartDates")
 	public ArrayList<Date> getStartDate(@RequestParam("location") String location){
 		ArrayList<Date> dates = carService.getStartDateByLocation(location);
-		
 		return dates;
 	}
 	
 	@GetMapping("/getEndDates")
-	public ArrayList<Date> getEndDate(Date date){
-		ArrayList<Date> dates = carService.getRentalEndDate(date);
-		System.out.println("End dates for all reservations: " + dates);
+	public ArrayList<Date> getEndDate(@RequestParam("location") String location){
+		ArrayList<Date> dates = carService.getEndDateByLocation(location);
 		return dates;
+	}
+	
+	@GetMapping("/getTotalCost/")
+	public Float getTotalCostById(@RequestParam("carid") int carid) {
+		Float totalCost = carService.getTotalCost(carid);
+		return totalCost;
 	}
 	
 	
