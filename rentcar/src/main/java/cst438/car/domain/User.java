@@ -6,6 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 
 @Entity
@@ -17,24 +18,29 @@ public class User {
     private long userid;
     
     @NotNull
+    @Size(min=1, max=50)
     private String emailaddress = "";
     
     @NotNull
+    @Size(min=1, max=50)
     private String name = "";
     
     @NotNull
+    @Size(min=3, max=30)
     private String password = "";
     
     @NotNull
-    private int creditnumber =0;
+    @Size(min=1, max=30)
+    private String creditnumber;
     
     @NotNull
+    @Size(min=1, max=80)
     private String address = "";
     
     public User() {
     }
 
-    public User(long userid, String emailaddress, String name, String password, int creditnumber,
+    public User(long userid, String emailaddress, String name, String password, String creditnumber,
             String address) {
         super();
         this.userid = userid;
@@ -77,11 +83,11 @@ public class User {
         this.password = password;
     }
 
-    public int getCreditnumber() {
+    public String getCreditnumber() {
         return creditnumber;
     }
 
-    public void setCreditnumber(int creditnumber) {
+    public void setCreditnumber(String creditnumber) {
         this.creditnumber = creditnumber;
     }
 

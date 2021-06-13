@@ -37,6 +37,8 @@ public class CarService {
     public boolean validateStartDate(Reservation reservation) {
         long millis = System.currentTimeMillis();
         Date currentDate = new java.sql.Date(millis);
+        if (reservation.getStartdate() == null)
+            return false;
         if (reservation.getStartdate().after(currentDate)) {
             return true;
         } else {
@@ -46,6 +48,8 @@ public class CarService {
     
     // return true if end date is after the start date
     public boolean validateEndDate(Reservation reservation) {
+        if (reservation.getEnddate() == null)
+            return false;
         if (reservation.getEnddate().after(reservation.getStartdate())) {
             return true;
         } else {
@@ -91,6 +95,17 @@ public class CarService {
     }
     
     // return null if no users found with that id
+    public User getUserInfo(User user) {
+        List<User> users = userRepository.findByEmailaddressAndPassword(
+                user.getEmailaddress(), user.getPassword());
+        if (users.size() > 0) {
+            return users.get(0);
+        } else {
+            return null;
+        }
+    }
+    
+    // return null if no users found with that id
     public User getUserInfo(Long userId) {
         List<User> users = userRepository.findByUserid(userId);
         if (users.size() > 0) {
@@ -109,6 +124,12 @@ public class CarService {
             return null;
         }
     }
+    
+    // create a new user in the repository
+    public User saveUser(User user) {
+        return userRepository.save(user);
+    }
+    
     
     public void setTotalPrice(Reservation reservation, Car car) {
         Long numOfDays = ChronoUnit.DAYS.between(
