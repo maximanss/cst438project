@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Reservation {
@@ -33,6 +34,7 @@ public class Reservation {
     private float totalprice = (float) 0.0;
     
     @NotNull
+    @Size(min=1)
     private String location;
     
     public Reservation() {

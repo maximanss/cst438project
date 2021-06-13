@@ -5,10 +5,19 @@
 <!-- Adding bootstrap -->
 <meta charset="ISO-8859-1">
 <title>Select Your Trip</title>
-<link rel="stylesheet"
- href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
- integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
- crossorigin="anonymous">
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
+	crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" 
+	integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" 
+	crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" 
+	integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" 
+	crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" 
+	integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" 
+	crossorigin="anonymous"></script>
  </head>
  
 <body>
@@ -34,52 +43,150 @@
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav">
       <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+      <!--  
       <a class="nav-item nav-link" href="#">About us</a>
-      <a class="nav-item nav-link" href="#">Register</a>
-      <a class="nav-item nav-link disabled" href="#">Login</a>
+      -->
+      <a class="nav-item nav-link" data-toggle="modal" href="#myRegisterModal" >Register</a>
+      <a class="nav-item nav-link" data-toggle="modal" href="#myLoginModal">Login</a>
+      <a class="nav-item nav-link" href="/cst438.carrentals.com/cancel">Cancel</a>
     </div>
   </div>
 </nav>
+	<!-- Register Modal -->
+	<div class="modal fade" id="myRegisterModal" tabindex="-1" role="dialog">
+  		<form action="#" th:action="@{/cst438.carrentals.com/register}" th:object="${user}" method="post"><br/>
+  		<div class="modal-dialog" role="document">
+    		<div class="modal-content">
+      			<div class="modal-header text-center">
+		        	<h4 class="modal-title w-100 font-weight-bold">Account Registration</h4>
+		        	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          		<span aria-hidden="true">&times;</span>
+		        	</button>
+      			</div>
+      			<div class="modal-body mx-3">
+        			<div class="md-form mb-4">
+		          		<i class="fas fa-envelope prefix grey-text"></i>
+		          		<input type="email" id="registerForm-email" class="form-control validate" th:field="*{emailaddress}">
+		          		<label data-error="wrong" data-success="right" for="registerForm-email">Your email</label>
+        			</div>
 
+        			<div class="md-form mb-4">
+				          <i class="fas fa-user prefix grey-text"></i>
+				          <input type="password" maxlength="30" id="registerForm-pass" class="form-control validate" th:field="*{password}">
+				          <label data-error="wrong" data-success="right" for="registerForm-pass">Your password</label>
+			        </div>
+        			
+        			<div class="md-form mb-4">
+				          <i class="fas fa-user prefix grey-text"></i>
+				          <input type="text" maxlength="50" id="registerForm-name" class="form-control validate" th:field="*{name}">
+				          <label data-error="wrong" data-success="right" for="registerForm-name">Your name</label>
+			        </div>
+			        
+			        <div class="md-form mb-4">
+				          <i class="fas fa-user prefix grey-text"></i>
+				          <input type="text" maxlength="80" id="registerForm-address" class="form-control validate" th:field="*{address}">
+				          <label data-error="wrong" data-success="right" for="registerForm-address">Your address</label>
+			        </div>
+			        
+			        <div class="md-form mb-4">
+				          <i class="fas fa-user prefix grey-text"></i>
+				          <input type="text" maxlength="20" id="registerForm-credit" class="form-control validate" th:field="*{creditnumber}">
+				          <label data-error="wrong" data-success="right" for="registerForm-credit">Your credit number</label>
+			        </div>
+
+      			</div>
+      			<div class="modal-footer d-flex justify-content-center">
+        			<button type="submit" name="register-submit" class="btn btn-primary">Submit</button>
+      			</div>
+    		</div>
+  		</div>
+  		</form>
+	</div>
+	  
+	  <!-- Login Modal -->
+	  <!-- from bootstrap example -->
+	  <div class="modal fade" id="myLoginModal" tabindex="-1" role="dialog">
+  		<form action="#" th:action="@{/cst438.carrentals.com/login}" th:object="${user}" method="post"><br/>
+  		<div class="modal-dialog" role="document">
+    		<div class="modal-content">
+      			<div class="modal-header text-center">
+		        	<h4 class="modal-title w-100 font-weight-bold">Log in</h4>
+		        	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          		<span aria-hidden="true">&times;</span>
+		        	</button>
+      			</div>
+      			<div class="modal-body mx-3">
+        			<div class="md-form mb-4">
+		          		<i class="fas fa-envelope prefix grey-text"></i>
+		          		<input type="email" id="defaultForm-email" class="form-control validate" th:field="*{emailaddress}">
+		          		<label data-error="wrong" data-success="right" for="defaultForm-email">Your email</label>
+        			</div>
+
+        			<div class="md-form mb-4">
+		          		<i class="fas fa-lock prefix grey-text"></i>
+		          		<input type="password" id="defaultForm-pass" class="form-control validate" th:field="*{password}">
+		          		<label data-error="wrong" data-success="right" for="defaultForm-pass">Your password</label>
+        			</div>
+
+      			</div>
+      			<div class="modal-footer d-flex justify-content-center">
+        			<button type="submit" name="login-submit" class="btn btn-primary">Login</button>
+      			</div>
+    		</div>
+  		</div>
+  		</form>
+	</div>
+	
 	<div style="margin: 0 0px 0px 18px; color:black; font-size:1em;">
 	<form action="#" th:action="@{/cst438.carrentals.com/carchoice}" th:object="${reservation}" method="post"><br/>
-		<div class="control-label" style="width:35%;">
+		<div class="control-label text-primary" style="width:35%;">
 			Location: <br/><select th:field="*{location}">
-			<option th:value="'Select'" th:text="Select"></option>
+			<option th:value="''" th:text="Select"></option>
 		    <option th:value="'Boston'" th:text="Boston"></option>
 		    <option th:value="'Miami'" th:text="Miami"></option>
 		    <option th:value="'Riverside'" th:text="Riverside"></option>
 		    <option th:value="'San Diego'" th:text="San+' '+Diego"></option>
-			</select><br /><br />
+			</select>
+			<span th:if="${#fields.hasErrors('location')}" class="bg-warning text-dark">Invalid Location</span> 
+			<br/><br/>
 		</div>
 		<div class="form-group" style="width:35%;"> <!-- Date input -->
-	        <label class="control-label" for="date">Start Date</label>
+	        <label class="control-label text-primary" for="date">Start Date</label>
 	        <input class="form-control" id="date" name="date" type="date" th:field="*{startdate}"/>
-	        <span th:if="${#fields.hasErrors('startdate')}" th:errors="*{startdate}"> </span> 
+	        <span th:if="${#fields.hasErrors('startdate')}" class="bg-warning text-dark">Invalid Start Date</span>
+	        <br/>
 	     </div>
 	      
 	     <div class="form-group" style="width:35%;"> <!-- Date input -->
-	        <label class="control-label" for="date">End Date</label>
+	        <label class="control-label text-primary" for="date">End Date</label>
 	        <input class="form-control" id="date" name="date" type="date" th:field="*{enddate}"/>
-	        <span th:if="${#fields.hasErrors('enddate')}" th:errors="*{enddate}"> </span> 
+	        <span th:if="${#fields.hasErrors('enddate')}" class="bg-warning text-dark">Invalid End Date </span>
+	        <br/>
 	     </div>
-		
-		<!-- 	
-		End Date: <input type="date"  th:field="*{enddate}" />
-		    <span th:if="${#fields.hasErrors('enddate')}" th:errors="*{enddate}"> </span> <br />  <br /> -->
-		    
-		    
 		    
 		    <div class="form-group"> <!-- Submit button -->
 	        <button class="btn btn-primary " name="submit" type="submit">Submit</button>
 	      </div>
-		<!-- <input type="submit" value="Submit" /> -->
-		
 		
 		
 	</form>
 	</div>
 	</div>
+	<br />
 	
+	<div th:if="${login_result}" class="alert alert-primary fixed-bottom"> [[${login_result}]]
+    </div>
+    <div th:if="${register_result}" class="alert alert-primary fixed-bottom"> [[${register_result}]]
+    </div>
+	<div th:if="${param.empty_error}" class="alert alert-warning fixed-bottom">    
+    	No Available Cars for the selected dates!
+    </div>
+    <div th:if="${param.enddate_error}" class="alert alert-warning fixed-bottom" >    
+    	<p>End Date Cannot be Before Start Date!</p>
+    </div>
+    <div th:if="${param.startdate_error}" class="alert alert-warning fixed-bottom" >    
+    	<p>Start Date has to be 1 day after current date!</p>
+    </div>
+    
 </body>
 </html>

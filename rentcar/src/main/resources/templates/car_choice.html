@@ -10,12 +10,23 @@
 <link th:href="@{/styles/car_choice.css}" rel="stylesheet" />
 </head>
 <body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	  <a class="navbar-brand" href="#">CarRent</a>
+	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+	    <span class="navbar-toggler-icon"></span>
+	  </button>
+	  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+	    <div class="navbar-nav">
+	      <a class="nav-item nav-link" href="/cst438.carrentals.com">Home <span class="sr-only">(current)</span></a>
+	    </div>
+	  </div>
+	</nav>
 	<h3>Select A Car to Rent at <span th:text="${reservation.location}"></span></h3>
 	<br/>
 	<div>
-		<form action="#" th:action="@{/cst438.carrentals.com/select}" method="post">
+		<form action="#" th:action="@{/cst438.carrentals.com/select}" th:object="${cars}" method="post">
 			<table class="center">
-				<tr th:each="car : ${cars}">
+				<tr th:each="car : *{carlist}">
 				<td th:text="${car.cartype?.cartypename}" width="20"></td>
 				<td>
 					<div>
@@ -46,21 +57,12 @@
 					</div>
 				</td>
 				
-				<!--
-				<td>
-					<div>
-						<p>Weekly Price</p>
-						<p>$<span th:text="${car.weeklyprice}"></span></p>
-						
-						<button type=submit name="weekly" th:value="${car.carid}" >Select</button>
-						
-					</div>
-				</td>
-				-->
+				
 				</tr>
 			</table>
 		</form>
 	</div>
-
+	<div th:if="${login_msg}" class="alert alert-primary fixed-bottom"> [[${login_msg}]]
+    </div>
 </body>
 </html>

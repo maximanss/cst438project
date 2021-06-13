@@ -1,17 +1,15 @@
 package cst438.car.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,69 +20,97 @@ import cst438.car.service.CarService;
 import cst438.car.domain.*;
 
 @Controller
-@SessionAttributes({"reservation", "cancellation"})
+@SessionAttributes({"reservation", "cancellation", "user", "cars"})
 public class CarController {
     
     @Autowired
     CarService carService;
     
-    @ModelAttribute
+    @ModelAttribute("reservation")
     public Reservation getNewReservation() {
         return new Reservation();
     }
     
-    @ModelAttribute
+    @ModelAttribute("cancellation")
     public Cancellation getNewCancellation() {
         return new Cancellation();
     }
     
+    @ModelAttribute("user")
+    public User getNewUser() {
+        return new User();
+    }
+    
+    @ModelAttribute("cars")
+    public CarListContainer getNewCars() {
+        return new CarListContainer();
+    }
+    
+       
     // Home page of URL like: web-hosting-sitename/cst438.carrentals.com
     @GetMapping("/cst438.carrentals.com")
-    public String displayDateLocation(Model model) {
+    public String displayDateLocation(
+            Model model) {
         return "date_selection";
     }
     
     @PostMapping("/cst438.carrentals.com/carchoice")
     public String displayCarChoices(@Valid Reservation reservation,
             BindingResult result,
+            CarListContainer cars,
             Model model) {
-        if (!reservation.getEnddate().after(reservation.getStartdate())) {
-            System.out.println("End date is not after start date");
+        
+        if (result.hasErrors()) {
             return "date_selection";
         }
-        Iterable<Car> cars = carService.getAvailableCars(reservation);
-        model.addAttribute("cars", cars);
+        
+        if (!carService.validateStartDate(reservation)) {
+            System.out.println("Start Date is not 1 day after current date");
+            //return "date_selection";
+            return "redirect:/cst438.carrentals.com?startdate_error";
+        }
+        if (!carService.validateEndDate(reservation)) {
+            System.out.println("End date is not after start date");
+            //return "date_selection";
+            return "redirect:/cst438.carrentals.com?enddate_error";
+        }
+        //List<Car> carAvailableList = carService.getAvailableCars(reservation);
+        cars.setCarlist(carService.getAvailableCars(reservation));
+        if (cars.getCarlist().size() == 0) {
+            return "redirect:/cst438.carrentals.com?empty_error";
+        }
+        //cars.setCarlist(carAvailableList);
         System.out.println("location:" + reservation.getLocation() +
                 " start date:" + reservation.getStartdate() + " end date:" + reservation.getEnddate());
-
+        System.out.println(cars);
+        model.addAttribute("cars", cars);
         return "car_choice";
     }
     
     //Request Method mapping for different select button
     @RequestMapping(value="/cst438.carrentals.com/select", method=RequestMethod.POST, params="selection")
-    public String selectDailyCar(@Valid Reservation reservation,
-            BindingResult result,
+    public String selectCar(
+            @Valid Reservation reservation, BindingResult result1,
+            @Valid User user, BindingResult result2,
             @RequestParam(value="selection") Long carid,
             Model model) {
         System.out.println("Daily Car is Selected, with car id:" + carid);
         System.out.println("location:" + reservation.getLocation() +
                 " start date:" + reservation.getStartdate() + " end date:" + reservation.getEnddate());
         
-        reservation.setCarid(carid);
         if (reservation.getUserid() == 0) {
-            System.out.println("Require User to Log in");
-            
-            //following are temporary, remove them when log in is ready
-            User tempUser = carService.getUserInfoByEmail("bob@gmail.com");
-            reservation.setUserid(tempUser.getUserid());
+            String login_msg = "Require User to Log in before selecting any car!";
+            System.out.println(login_msg);
+            model.addAttribute("login_msg", login_msg);
+            return "car_choice";
             
         } 
-        
-        User user = carService.getUserInfo(reservation.getUserid());
-        model.addAttribute("user", user);
+        // process reservation
+        reservation.setCarid(carid);
         Car car = carService.getCarInfo(carid);
         model.addAttribute("car", car);
         carService.setTotalPrice(reservation, car);
+        System.out.println(user);
         return "car_confirm";
     }
     
@@ -125,7 +151,8 @@ public class CarController {
     
     // Cancellation page to allow user to cancel car reservation
     @GetMapping("/cst438.carrentals.com/cancel")
-    public String displayCancellation(Model model) {
+    public String displayCancellation(
+            Model model) {
         return "car_cancel";
     }
     
@@ -157,6 +184,55 @@ public class CarController {
     
     @PostMapping("/cst438.carrentals.com/cancel_confirm")
     public String confirmCancellation(Model model) {
+        return "date_selection";
+    }
+    
+    @PostMapping("/cst438.carrentals.com/login")
+    public String validateUserInfo(
+            @Valid User user, BindingResult result1,
+            Reservation reservation,
+            Model model) {
+        
+        String login_result;
+        user.setEmailaddress(user.getEmailaddress().toLowerCase());
+        User loginUser = carService.getUserInfo(user);
+        if (loginUser != null) {
+            model.addAttribute("user", loginUser);
+            reservation.setUserid(loginUser.getUserid());
+            login_result = "Login Successfully!";
+        } else {
+            login_result = "Login Failed!";
+        }
+        System.out.println(login_result);
+        model.addAttribute("login_result", login_result);
+        return "date_selection";
+    }
+    
+    @PostMapping("/cst438.carrentals.com/register")
+    public String displayRegistration(
+            @Valid User user, BindingResult result,
+            Reservation reservation,
+            Model model) {
+        
+        if (result.hasErrors()) {
+            System.out.println("Register Validation Error");
+            return "date_selection";
+        }
+        String register_result;
+        // check for existing account
+        user.setEmailaddress(user.getEmailaddress().toLowerCase());
+        User registerUser = carService.getUserInfoByEmail(user.getEmailaddress());
+        if (registerUser == null) {
+            // new user, save the user info
+            user.setUserid(0);  // make sure adding a new record - not updating
+            user = carService.saveUser(user);
+            reservation.setUserid(user.getUserid());
+            register_result = "Account Successfully Created!";
+        } else {
+            register_result = "Failed to Create - Account Existed!";
+        }
+        System.out.println(register_result + "-" + user);
+        model.addAttribute("register_result", register_result);
         return "date_selection";
     }
 

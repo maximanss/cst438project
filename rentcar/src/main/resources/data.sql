@@ -45,8 +45,8 @@ AM/FM Stereo Radio, Automatic, Air Conditioning, and Bluetooth.", 5, "Boston", "
 AM/FM Stereo Radio, Automatic, Air Conditioning, and Bluetooth.", 5, "Miami", "luxury.png", 130.00, 700.25);
 
 INSERT INTO user (emailAddress, name, password, creditNumber, address) VALUES
-("bob@gmail.com", "Bob", "bob_pwd", 123456, "bob home address"),
-("sue@gmail.com", "Sue", "sue_pwd", 234567, "sue home address");
+("bob@gmail.com", "Bob", "bob_pwd", "123456", "bob home address"),
+("sue@gmail.com", "Sue", "sue_pwd", "234567", "sue home address");
 
 INSERT INTO partner(name, discountRate) VALUES
 ("Cheap Trip", 0.7),

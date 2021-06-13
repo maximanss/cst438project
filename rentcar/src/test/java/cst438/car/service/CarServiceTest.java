@@ -505,7 +505,7 @@ public class CarServiceTest {
     public void testCancelUserReservation_1() throws Exception {
         
         // create a user for testing
-        User u1 = new User(100L, "email100", "user100", "pwd100", 9100, "address100");
+        User u1 = new User(100L, "email100", "user100", "pwd100", "9100", "address100");
         List<User> users = new ArrayList<User>();
         users.add(u1);
                 
@@ -576,7 +576,7 @@ public class CarServiceTest {
     public void testCancelUserReservation_3() throws Exception {
         
         // create a user for testing
-        User u1 = new User(100L, "email100", "user100", "pwd100", 9100, "address100");
+        User u1 = new User(100L, "email100", "user100", "pwd100", "9100", "address100");
         List<User> users = new ArrayList<User>();
         users.add(u1);
                 
