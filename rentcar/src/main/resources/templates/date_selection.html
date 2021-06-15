@@ -48,13 +48,13 @@
       -->
       <a class="nav-item nav-link" data-toggle="modal" href="#myRegisterModal" >Register</a>
       <a class="nav-item nav-link" data-toggle="modal" href="#myLoginModal">Login</a>
-      <a class="nav-item nav-link" href="/cst438.carrentals.com/cancel">Cancel</a>
+      <a class="nav-item nav-link" href="/cancel">Cancel</a>
     </div>
   </div>
 </nav>
 	<!-- Register Modal -->
 	<div class="modal fade" id="myRegisterModal" tabindex="-1" role="dialog">
-  		<form action="#" th:action="@{/cst438.carrentals.com/register}" th:object="${user}" method="post"><br/>
+  		<form action="#" th:action="@{/register}" th:object="${user}" method="post"><br/>
   		<div class="modal-dialog" role="document">
     		<div class="modal-content">
       			<div class="modal-header text-center">
@@ -106,7 +106,7 @@
 	  <!-- Login Modal -->
 	  <!-- from bootstrap example -->
 	  <div class="modal fade" id="myLoginModal" tabindex="-1" role="dialog">
-  		<form action="#" th:action="@{/cst438.carrentals.com/login}" th:object="${user}" method="post"><br/>
+  		<form action="#" th:action="@{/login}" th:object="${user}" method="post"><br/>
   		<div class="modal-dialog" role="document">
     		<div class="modal-content">
       			<div class="modal-header text-center">
@@ -138,7 +138,7 @@
 	</div>
 	
 	<div style="margin: 0 0px 0px 18px; color:black; font-size:1em;">
-	<form action="#" th:action="@{/cst438.carrentals.com/carchoice}" th:object="${reservation}" method="post"><br/>
+	<form action="#" th:action="@{/carchoice}" th:object="${reservation}" method="post"><br/>
 		<div class="control-label text-primary" style="width:35%;">
 			Location: <br/><select th:field="*{location}">
 			<option th:value="''" th:text="Select"></option>
@@ -182,7 +182,7 @@
     	No Available Cars for the selected dates!
     </div>
     <div th:if="${param.enddate_error}" class="alert alert-warning fixed-bottom" >    
-    	<p>End Date Cannot be Before Start Date!</p>
+    	<p>End Date has to be after Start Date!</p>
     </div>
     <div th:if="${param.startdate_error}" class="alert alert-warning fixed-bottom" >    
     	<p>Start Date has to be 1 day after current date!</p>

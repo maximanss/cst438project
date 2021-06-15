@@ -17,13 +17,13 @@
 	  </button>
 	  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 	    <div class="navbar-nav">
-	      <a class="nav-item nav-link" href="/cst438.carrentals.com">Home <span class="sr-only">(current)</span></a>
+	      <a class="nav-item nav-link" href="/">Home <span class="sr-only">(current)</span></a>
 	    </div>
 	  </div>
 	</nav>
 	<h3>Thank you! Your Reservation is Confirmed.</h3>
 	<div>
-		<form action="#" th:action="@{/cst438.carrentals.com/reserve}" method="post">
+		<form action="#" th:action="@{/reserve}" method="post">
 			<div>
 			<p class="center">Your Reservation Number: [[${reservation.reserveid}]]</p>
 			</div>
