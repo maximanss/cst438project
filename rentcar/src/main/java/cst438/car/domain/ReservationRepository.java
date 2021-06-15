@@ -13,5 +13,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Reservation> findByCarid(Long id);
     
     List<Reservation> findByReserveidAndUserid(Long rid, Long uid);
+    
+    List<Reservation> findByReserveidAndCompanyid(Long rid, Long cid);
 
 }
