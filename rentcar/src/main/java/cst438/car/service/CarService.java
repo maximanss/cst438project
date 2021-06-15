@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import cst438.car.domain.*;
 
@@ -21,6 +23,9 @@ public class CarService {
     
     @Autowired
     private ReservationRepository reservationRepository;
+    
+    @Autowired
+    private PartnerRepository partnerRepository;
     
     // this constructor is used in unit test to stub out
     // carRepository, userRepository and reservationRepository.
@@ -169,5 +174,62 @@ public class CarService {
             }
         }
         return false; // fail since the reservation not exist
+    }
+    
+    public boolean validateCompanyId(Long companyid) {
+        List<Partner> companylist = partnerRepository.findByCompanyid(companyid);
+        if (companylist.size() == 0) {
+            return false;
+        }
+        return true;
+    }
+    
+    public ResponseEntity<ReserveInfo> bookPartnerReservation(Reservation reservation, String cartype) {
+        if (validateCompanyId(reservation.getCompanyid())) {
+            
+            // get all the available cars that are good with the location and dates
+            List<Car> cars = getAvailableCars(reservation); 
+            
+            if (cars.size() > 0) {
+               // filter the list with desired cartype
+               List<Car> matchedCars = new ArrayList<Car>();
+               for (Car car : cars) {
+                   if (car.getCartype().getCartypename().equalsIgnoreCase(cartype) ) {
+                       matchedCars.add(car);
+                   }
+               }
+               if (matchedCars.size() > 0 )
+               {
+                   // Take the first car in the matchedCars list to reserve it for the partner company
+                   Car car = matchedCars.get(0);
+                   reservation.setCarid(car.getCarid());
+                   
+                   // determine the total price
+                   // give them discount in next phase of project development
+                   setTotalPrice(reservation, car);
+                   
+                   // save the reservation to db
+                   reservation.setReserveid(0); // make sure to set it to zero for saving
+                   Reservation reserve = saveReservation(reservation);
+                   
+                   System.out.println("bookPartnerReservation" + reserve);
+                   
+                   ReserveInfo reserveInfo = new ReserveInfo(reserve.getReserveid(), reserve.getTotalprice());
+
+                   return new ResponseEntity<ReserveInfo>(reserveInfo, HttpStatus.OK);
+                   
+               }
+            }
+            
+            // acknowledge the request but no cars available for the request
+            System.out.println("bookPartnerReservation, no cars available for the request");
+            return new ResponseEntity<ReserveInfo>(HttpStatus.NO_CONTENT);
+            
+        } else {
+            // company id not found. Send 404 return code.
+            // return new ReserveInfo(HttpStatus.NOT_FOUND);
+            System.out.println("bookPartnerReservation, company id not matched any in the database");
+            return new ResponseEntity<ReserveInfo>(HttpStatus.NOT_FOUND);
+        }
     }
 }
