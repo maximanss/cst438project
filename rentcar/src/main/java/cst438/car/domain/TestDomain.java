@@ -1,5 +1,8 @@
 package cst438.car.domain;
 
+/**
+ * It is only for testing the domain entities for checking the database setup
+ */
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;

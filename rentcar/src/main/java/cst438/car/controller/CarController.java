@@ -47,14 +47,14 @@ public class CarController {
     }
     
        
-    // Home page of URL like: web-hosting-sitename/cst438.carrentals.com
-    @GetMapping("/cst438.carrentals.com")
+    // Home page of URL like: web-hosting-sitename/
+    @GetMapping("/")
     public String displayDateLocation(
             Model model) {
         return "date_selection";
     }
     
-    @PostMapping("/cst438.carrentals.com/carchoice")
+    @PostMapping("/carchoice")
     public String displayCarChoices(@Valid Reservation reservation,
             BindingResult result,
             CarListContainer cars,
@@ -67,17 +67,17 @@ public class CarController {
         if (!carService.validateStartDate(reservation)) {
             System.out.println("Start Date is not 1 day after current date");
             //return "date_selection";
-            return "redirect:/cst438.carrentals.com?startdate_error";
+            return "redirect:/?startdate_error";
         }
         if (!carService.validateEndDate(reservation)) {
             System.out.println("End date is not after start date");
             //return "date_selection";
-            return "redirect:/cst438.carrentals.com?enddate_error";
+            return "redirect:/?enddate_error";
         }
         //List<Car> carAvailableList = carService.getAvailableCars(reservation);
         cars.setCarlist(carService.getAvailableCars(reservation));
         if (cars.getCarlist().size() == 0) {
-            return "redirect:/cst438.carrentals.com?empty_error";
+            return "redirect:/?empty_error";
         }
         //cars.setCarlist(carAvailableList);
         System.out.println("location:" + reservation.getLocation() +
@@ -88,14 +88,13 @@ public class CarController {
     }
     
     //Request Method mapping for different select button
-    @RequestMapping(value="/cst438.carrentals.com/select", method=RequestMethod.POST, params="selection")
+    @RequestMapping(value="/select", method=RequestMethod.POST, params="selection")
     public String selectCar(
             @Valid Reservation reservation, BindingResult result1,
             @Valid User user, BindingResult result2,
             @RequestParam(value="selection") Long carid,
             Model model) {
-        System.out.println("Daily Car is Selected, with car id:" + carid);
-        System.out.println("location:" + reservation.getLocation() +
+        System.out.println("car id:" + carid + " location:" + reservation.getLocation() +
                 " start date:" + reservation.getStartdate() + " end date:" + reservation.getEnddate());
         
         if (reservation.getUserid() == 0) {
@@ -115,7 +114,7 @@ public class CarController {
     }
     
         
-    @PostMapping("/cst438.carrentals.com/confirm")
+    @PostMapping("/confirm")
     public String displayConfirmation(@Valid Reservation reservation,
             BindingResult result,
             @RequestParam("confirm") String confirm,
@@ -137,7 +136,7 @@ public class CarController {
 
     }
     
-    @PostMapping("/cst438.carrentals.com/reserve")
+    @PostMapping("/reserve")
     public String displayConfirmation(@Valid Reservation reservation,
             BindingResult result,
             Model model) {
@@ -150,13 +149,13 @@ public class CarController {
     }
     
     // Cancellation page to allow user to cancel car reservation
-    @GetMapping("/cst438.carrentals.com/cancel")
+    @GetMapping("/cancel")
     public String displayCancellation(
             Model model) {
         return "car_cancel";
     }
     
-    @PostMapping("/cst438.carrentals.com/cancel")
+    @PostMapping("/cancel")
     public String processCancellation(@Valid Cancellation cancellation, 
             BindingResult result,
             @RequestParam("confirm") String confirm,
@@ -182,12 +181,12 @@ public class CarController {
         }
     }
     
-    @PostMapping("/cst438.carrentals.com/cancel_confirm")
+    @PostMapping("/cancel_confirm")
     public String confirmCancellation(Model model) {
         return "date_selection";
     }
     
-    @PostMapping("/cst438.carrentals.com/login")
+    @PostMapping("/login")
     public String validateUserInfo(
             @Valid User user, BindingResult result1,
             Reservation reservation,
@@ -208,28 +207,29 @@ public class CarController {
         return "date_selection";
     }
     
-    @PostMapping("/cst438.carrentals.com/register")
+    @PostMapping("/register")
     public String displayRegistration(
             @Valid User user, BindingResult result,
             Reservation reservation,
             Model model) {
         
-        if (result.hasErrors()) {
-            System.out.println("Register Validation Error");
-            return "date_selection";
-        }
         String register_result;
-        // check for existing account
-        user.setEmailaddress(user.getEmailaddress().toLowerCase());
-        User registerUser = carService.getUserInfoByEmail(user.getEmailaddress());
-        if (registerUser == null) {
-            // new user, save the user info
-            user.setUserid(0);  // make sure adding a new record - not updating
-            user = carService.saveUser(user);
-            reservation.setUserid(user.getUserid());
-            register_result = "Account Successfully Created!";
-        } else {
-            register_result = "Failed to Create - Account Existed!";
+        if (result.hasErrors()) {
+            register_result = "Failed to Create Account - missing/invalid entries!";
+        }
+        else {
+            // check for existing account
+            user.setEmailaddress(user.getEmailaddress().toLowerCase());
+            User registerUser = carService.getUserInfoByEmail(user.getEmailaddress());
+            if (registerUser == null) {
+                // new user, save the user info
+                user.setUserid(0);  // make sure adding a new record - not updating
+                user = carService.saveUser(user);
+                reservation.setUserid(user.getUserid());
+                register_result = "Account Successfully Created!";
+            } else {
+                register_result = "Failed to Create - Account Existed!";
+            }
         }
         System.out.println(register_result + "-" + user);
         model.addAttribute("register_result", register_result);

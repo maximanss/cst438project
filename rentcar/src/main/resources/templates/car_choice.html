@@ -17,14 +17,14 @@
 	  </button>
 	  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 	    <div class="navbar-nav">
-	      <a class="nav-item nav-link" href="/cst438.carrentals.com">Home <span class="sr-only">(current)</span></a>
+	      <a class="nav-item nav-link" href="/">Home <span class="sr-only">(current)</span></a>
 	    </div>
 	  </div>
 	</nav>
 	<h3>Select A Car to Rent at <span th:text="${reservation.location}"></span></h3>
 	<br/>
 	<div>
-		<form action="#" th:action="@{/cst438.carrentals.com/select}" th:object="${cars}" method="post">
+		<form action="#" th:action="@{/select}" th:object="${cars}" method="post">
 			<table class="center">
 				<tr th:each="car : *{carlist}">
 				<td th:text="${car.cartype?.cartypename}" width="20"></td>
