@@ -153,6 +153,8 @@ public class CarService {
         }
     }
     
+   
+    
     // create a new reservation in the repository
     public Reservation saveReservation(Reservation reservation) {
         return reservationRepository.save(reservation);
@@ -175,6 +177,7 @@ public class CarService {
         }
         return false; // fail since the reservation not exist
     }
+
     
     public boolean validateCompanyId(Long companyid) {
         List<Partner> companylist = partnerRepository.findByCompanyid(companyid);
@@ -232,4 +235,6 @@ public class CarService {
             return new ResponseEntity<ReserveInfo>(HttpStatus.NOT_FOUND);
         }
     }
+
 }
+
