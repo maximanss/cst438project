@@ -27,7 +27,7 @@ public class TestDomain {
      */
     @GetMapping("/cars/{cityName}")   
     public String displayAllCars(@PathVariable("cityName") String location, Model model) {
-        Iterable<Car> cars = carRepository.findByLocation(location);
+        Iterable<Car> cars = carRepository.findByLocationIgnoreCase(location);
         for (Car car : cars) {
             System.out.println("ID:"+car.getCarid()+", Type:"+ car.getCartype().getCartypename());
         }

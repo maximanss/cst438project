@@ -85,7 +85,7 @@ public class CarServiceTest {
         
         // this is the stub for CarRepository
         // When given location = "Location10", it will return a list of cars at location 10
-        given(mockCarRepository.findByLocation("Location10")).willReturn(cars);
+        given(mockCarRepository.findByLocationIgnoreCase("Location10")).willReturn(cars);
 
         // this is the stub for the ReservationRepository. 
         // When given input carid=1, it will return a list of reservations for carid=1.
@@ -152,7 +152,7 @@ public class CarServiceTest {
         
         // this is the stub for CarRepository
         // When given location = "Location10", it will return a list of cars at location 10
-        given(mockCarRepository.findByLocation("Location10")).willReturn(cars);
+        given(mockCarRepository.findByLocationIgnoreCase("Location10")).willReturn(cars);
 
         // this is the stub for the ReservationRepository. 
         // When given input carid=1, it will return a list of reservations for carid=1.
@@ -218,7 +218,7 @@ public class CarServiceTest {
         
         // this is the stub for CarRepository
         // When given location = "Location10", it will return a list of cars at location 10
-        given(mockCarRepository.findByLocation("Location10")).willReturn(cars);
+        given(mockCarRepository.findByLocationIgnoreCase("Location10")).willReturn(cars);
 
         // this is the stub for the ReservationRepository. 
         // When given input carid=1, it will return a list of reservations for carid=1.
@@ -284,7 +284,7 @@ public class CarServiceTest {
         
         // this is the stub for CarRepository
         // When given location = "Location10", it will return a list of cars at location 10
-        given(mockCarRepository.findByLocation("Location10")).willReturn(cars);
+        given(mockCarRepository.findByLocationIgnoreCase("Location10")).willReturn(cars);
 
         // this is the stub for the ReservationRepository. 
         // When given input carid=2, it will return a list of reservations for carid=1.
@@ -349,7 +349,7 @@ public class CarServiceTest {
         
         // this is the stub for CarRepository
         // When given location = "Location10", it will return a list of cars at location 10
-        given(mockCarRepository.findByLocation("Location10")).willReturn(cars);
+        given(mockCarRepository.findByLocationIgnoreCase("Location10")).willReturn(cars);
 
         // this is the stub for the ReservationRepository. 
         // When given input carid=2, it will return a list of reservations for carid=1.
@@ -406,7 +406,7 @@ public class CarServiceTest {
         
         // this is the stub for CarRepository
         // When given location = "Location10", it will return an empty list of cars at Location10
-        given(mockCarRepository.findByLocation("Location10")).willReturn(cars);
+        given(mockCarRepository.findByLocationIgnoreCase("Location10")).willReturn(cars);
 
         // this is the stub for the ReservationRepository. 
         // When given input carid=2, it will return a list of reservations for carid=1.
@@ -464,7 +464,7 @@ public class CarServiceTest {
         
         // this is the stub for CarRepository
         // When given location = "Location10", it will return a list of cars at location 10
-        given(mockCarRepository.findByLocation("Location10")).willReturn(cars);
+        given(mockCarRepository.findByLocationIgnoreCase("Location10")).willReturn(cars);
 
         // this is the stub for the ReservationRepository. 
         // When given input carid=2, it will return a list of reservations for carid=1.
