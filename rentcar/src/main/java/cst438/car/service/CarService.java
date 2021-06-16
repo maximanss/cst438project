@@ -236,5 +236,26 @@ public class CarService {
         }
     }
 
+    
+    public ResponseEntity<Long> cancelPartnerReservation(Long partnerid, Long reserveNum) {
+        
+        // check whether the partner company is in the db
+        if (validateCompanyId(partnerid)) {
+            
+            // the company is a partner company
+            
+            // Check whether the reservation exists and belongs to the user (email address)
+            List<Reservation> reservations = reservationRepository.findByReserveidAndCompanyid(reserveNum, partnerid);
+            if (reservations.size() > 0) {
+                // delete the reservation since the reservation belongs to that company
+                reservationRepository.deleteById(reserveNum);
+                
+            }
+            return new ResponseEntity<>(reserveNum, HttpStatus.OK);
+            // return true even the reservation is no longer in the db
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);// not found since the company does not exist
+    }
+
 }
 

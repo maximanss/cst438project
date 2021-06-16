@@ -8,6 +8,8 @@ import java.sql.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,10 +29,11 @@ public class RestCarController {
     
         
     @GetMapping("/book")
-    public ResponseEntity<ReserveInfo> bookCar(@RequestParam("companyid") String companyid, 
-            @RequestParam("startdate") String startdate, 
-            @RequestParam("enddate") String enddate, 
-            @RequestParam("location") String location,
+    public ResponseEntity<ReserveInfo> bookCar(
+            @RequestParam(required=true) String companyid, 
+            @RequestParam(required=true) String startdate, 
+            @RequestParam(required=true) String enddate, 
+            @RequestParam(required=true) String location,
             @RequestParam(defaultValue = "Standard") String cartype){
         
         long company = Long.parseLong(companyid); // convert companyid back to long
@@ -50,7 +53,17 @@ public class RestCarController {
         
     }
     
-    
+    @DeleteMapping("/cancel")
+    public ResponseEntity<Long> removeBooking(@RequestParam(required = true) String companyid,
+            @RequestParam(required = true) String reservationid) {
 
+        // convert the strings to long
+        long coid = Long.parseLong(companyid);
+        long rid = Long.parseLong(reservationid);
+
+
+        return carService.cancelPartnerReservation(coid, rid);
+
+    }
 }
 

@@ -18,21 +18,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     
     List<Reservation> findByReserveidAndUserid(Long rid, Long uid);
     
-    @Query(
-    	value = "SELECT distinct startdate from Reservation r where r.location=?1", 
-    	nativeQuery=true)
-    ArrayList<Date> findStartDateByLocation(String location);
-    
-    
-    @Query(
-        	value = "SELECT distinct enddate from Reservation r where r.location=?1", 
-        	nativeQuery=true)
-        ArrayList<Date> findEndDateByLocation(String location);
-    
-    @Query(
-    	value="SELECT totalPrice FROM Reservation r WHERE carID=?1", nativeQuery=true)
-    	Float findTotalCostById(int carid);
-    
-    
+
+    List<Reservation> findByReserveidAndCompanyid(Long rid, Long cid);
+
 
 }
