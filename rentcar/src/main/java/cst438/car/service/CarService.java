@@ -214,8 +214,12 @@ public class CarService {
                    
                    System.out.println("bookPartnerReservation" + reserve);
                    
-                   ReserveInfo reserveInfo = new ReserveInfo(reserve.getReserveid(), reserve.getTotalprice());
-
+                   ReserveInfo reserveInfo = new ReserveInfo(reserve.getReserveid(),
+                           car.getCartype().getCartypename(),
+                           car.getDescription(),
+                           reserve.getTotalprice());
+                   System.out.println("bookPartnerReservation" + reserveInfo);
+                   
                    return new ResponseEntity<ReserveInfo>(reserveInfo, HttpStatus.OK);
                    
                }
