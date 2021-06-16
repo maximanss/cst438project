@@ -34,7 +34,7 @@ public class RestCarController {
             @RequestParam(required=true) String startdate, 
             @RequestParam(required=true) String enddate, 
             @RequestParam(required=true) String location,
-            @RequestParam(defaultValue = "Standard") String cartype){
+            @RequestParam(defaultValue = "any") String cartype){
         
         long company = Long.parseLong(companyid); // convert companyid back to long
         
