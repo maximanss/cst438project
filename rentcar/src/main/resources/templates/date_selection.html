@@ -144,8 +144,10 @@
 			<option th:value="''" th:text="Select"></option>
 		    <option th:value="'Boston'" th:text="Boston"></option>
 		    <option th:value="'Miami'" th:text="Miami"></option>
-		    <option th:value="'Riverside'" th:text="Riverside"></option>
-		    <option th:value="'San Diego'" th:text="San+' '+Diego"></option>
+		    <option th:value="'Las Vegas'" th:text="Las+' '+Vegas"></option>
+		    <option th:value="'New York'" th:text="New+' '+York"></option>
+		    <option th:value="'San Francisco'" th:text="San+' '+Francisco"></option>
+		    
 			</select>
 			<span th:if="${#fields.hasErrors('location')}" class="bg-warning text-dark">Invalid Location</span> 
 			<br/><br/>

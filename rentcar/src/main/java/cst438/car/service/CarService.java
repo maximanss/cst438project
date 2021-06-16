@@ -64,7 +64,7 @@ public class CarService {
     
     public List<Car> getAvailableCars(Reservation reservation) {
             
-        List<Car> cars = carRepository.findByLocation(reservation.getLocation());
+        List<Car> cars = carRepository.findByLocationIgnoreCase(reservation.getLocation());
         List<Car> availableCars = new ArrayList<Car>(); 
         for (Car car: cars )
         {
