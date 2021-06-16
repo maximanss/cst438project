@@ -3,6 +3,7 @@ package cst438.car.service;
 import java.sql.Date;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +70,7 @@ public class CarService {
         for (Car car: cars )
         {
             boolean overlap = false;
-            System.out.println("Car:"+car);
+            //System.out.println("Car:"+car);
             // check the same car in reservation db to see the request dates are good 
             List<Reservation> reservedList = reservationRepository.findByCarid(car.getCarid());
             for (Reservation reserved: reservedList) {
@@ -188,16 +189,28 @@ public class CarService {
         if (validateCompanyId(reservation.getCompanyid())) {
             
             // get all the available cars that are good with the location and dates
-            List<Car> cars = getAvailableCars(reservation); 
+            List<Car> cars = getAvailableCars(reservation);
+            
+            System.out.println("bookPartnerReservation- cartype:" + cartype);
+            System.out.println("bookPartnerReservation:" + cars);
             
             if (cars.size() > 0) {
-               // filter the list with desired cartype
                List<Car> matchedCars = new ArrayList<Car>();
-               for (Car car : cars) {
-                   if (car.getCartype().getCartypename().equalsIgnoreCase(cartype) ) {
+               
+               if (!cartype.equals("any")) {
+                   // filter the list with desired cartype
+                   for (Car car : cars) {
+                           if (car.getCartype().getCartypename().equalsIgnoreCase(cartype) ) {
+                               matchedCars.add(car);
+                           }
+                       } 
+               } else {
+                   // no cartype is not specified, so copy the whole list
+                   for (Car car: cars) {
                        matchedCars.add(car);
                    }
                }
+               
                if (matchedCars.size() > 0 )
                {
                    // Take the first car in the matchedCars list to reserve it for the partner company
