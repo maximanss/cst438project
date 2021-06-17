@@ -192,7 +192,9 @@ public class CarService {
         }
     }
     
+
     // create a new reservation in the repository and return the reservation record with the new reservation id in the record
+
     public Reservation saveReservation(Reservation reservation) {
         return reservationRepository.save(reservation);
     }
@@ -216,6 +218,7 @@ public class CarService {
         }
         return false; // fail since the reservation not exist
     }
+
     
     // validate whether the given company id is in the database
     public boolean validateCompanyId(Long companyid) {
@@ -275,6 +278,7 @@ public class CarService {
             return new ResponseEntity<ReserveInfo>(HttpStatus.NOT_FOUND);
         }
     }
+
     
     // remove the reservation from the given partner company id and reservation id
     // Return Http.Status.NOT_FOUND if the partner company is not in the database otherwise return Http.Status.OK
@@ -297,4 +301,6 @@ public class CarService {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);// not found since the company does not exist
     }
+
 }
+

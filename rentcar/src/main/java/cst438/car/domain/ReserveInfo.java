@@ -7,7 +7,44 @@ package cst438.car.domain;
  */
 public class ReserveInfo {
     
-    private long reservation_id;
+    @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((car_type == null) ? 0 : car_type.hashCode());
+		result = prime * result + ((description == null) ? 0 : description.hashCode());
+		result = prime * result + (int) (reservation_id ^ (reservation_id >>> 32));
+		result = prime * result + Float.floatToIntBits(total_price);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ReserveInfo other = (ReserveInfo) obj;
+		if (car_type == null) {
+			if (other.car_type != null)
+				return false;
+		} else if (!car_type.equals(other.car_type))
+			return false;
+		if (description == null) {
+			if (other.description != null)
+				return false;
+		} else if (!description.equals(other.description))
+			return false;
+		if (reservation_id != other.reservation_id)
+			return false;
+		if (Float.floatToIntBits(total_price) != Float.floatToIntBits(other.total_price))
+			return false;
+		return true;
+	}
+
+	private long reservation_id;
     private String car_type;
     private String description;
     private float total_price;
