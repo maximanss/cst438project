@@ -8,6 +8,7 @@ package cst438.car.service;
 import java.sql.Date;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,10 @@ public class CarService {
     @Autowired
     private PartnerRepository partnerRepository;
     
+    public CarService() {
+        
+    }
+    
     // this constructor is used in unit test to stub out
     // carRepository, userRepository and reservationRepository.
     public CarService(CarRepository mockCarRepository, 
@@ -43,8 +48,8 @@ public class CarService {
         this.reservationRepository = mockReservationRepository;
     }
     
-    // this constructor is used in unit test to stub out that use
-    // carRepository, userRepository, reservationRepository and partnerRepository
+    // this constructor is used in unit test to stub out
+    // carRepository, userRepository and reservationRepository.
     public CarService(CarRepository mockCarRepository, 
             UserRepository mockUserRepository, 
             ReservationRepository mockReservationRepository,
@@ -55,7 +60,7 @@ public class CarService {
         this.reservationRepository = mockReservationRepository;
         this.partnerRepository = mockPartnerRepository;
     }
-    
+
     // return true if start date is after the current date
     public boolean validateStartDate(Reservation reservation) {
         long millis = System.currentTimeMillis();
