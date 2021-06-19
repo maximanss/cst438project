@@ -90,4 +90,50 @@ public class RestCarControllerTest {
      assertThat(testResult).isEqualTo(expectedResult);
      }
 
+     /**
+      * This test will check for bad request 
+      */
+     @Test
+     public void testBookCar_2() throws Exception {
+
+     // prepare the stub for the CarService. 
+     // the passing parameter for the stub
+     Reservation reservation = new Reservation();
+     reservation.setCompanyid(999);
+     reservation.setStartdate(Date.valueOf("2030-01-01"));
+     reservation.setEnddate(Date.valueOf("2030-01-10"));
+     reservation.setLocation("testcity");
+     String cartype = "suv";
+     
+     // prepare the expected result for the stub
+     ReserveInfo reserveInfo = new ReserveInfo(1L, null, null, (float)-1);
+     
+     // the return value from the stub using the above parameters and expected result
+     given(carService.bookPartnerReservation(reservation, cartype))
+             .willReturn(new ResponseEntity<ReserveInfo>(reserveInfo, HttpStatus.BAD_REQUEST));
+     
+     // perform the test by making simulated HTTP get using URL of
+     // "/api/book" to the RestCarController
+     MockHttpServletResponse response = mvc.perform(
+             get("/api/book?companyid=999&startdate=2030-01-01&enddate=2030-01-10&location=testcity&cartype=suv"))
+             .andReturn()
+             .getResponse();
+
+     // first verify the http status response code is as expected
+     assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+
+     System.out.println("Mock Response:" + response.getContentAsString());
+
+     // convert returned data from JSON string format to ReserveInfo object
+     ReserveInfo testResult = jsonReserveAttempt.parseObject(response.getContentAsString());
+
+     ReserveInfo expectedResult = reserveInfo;
+
+     // compare actual return data with expected data
+     // MUST implement .equals( ) method for ReserveInfo class.
+     assertThat(testResult).isEqualTo(expectedResult);
+     }
+
  }
+
+ 
