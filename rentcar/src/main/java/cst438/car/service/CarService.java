@@ -33,6 +33,10 @@ public class CarService {
     @Autowired
     private PartnerRepository partnerRepository;
     
+    public CarService() {
+        
+    }
+    
     // this constructor is used in unit test to stub out
     // carRepository, userRepository and reservationRepository.
     public CarService(CarRepository mockCarRepository, 
@@ -44,6 +48,19 @@ public class CarService {
         this.reservationRepository = mockReservationRepository;
     }
     
+    // this constructor is used in unit test to stub out
+    // carRepository, userRepository and reservationRepository.
+    public CarService(CarRepository mockCarRepository, 
+            UserRepository mockUserRepository, 
+            ReservationRepository mockReservationRepository,
+            PartnerRepository mockPartnerRepository) {
+        
+        this.carRepository = mockCarRepository;
+        this.userRepository = mockUserRepository;
+        this.reservationRepository = mockReservationRepository;
+        this.partnerRepository = mockPartnerRepository;
+    }
+
     // return true if start date is after the current date
     public boolean validateStartDate(Reservation reservation) {
         long millis = System.currentTimeMillis();
