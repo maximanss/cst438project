@@ -31,6 +31,9 @@ public class RestCarController {
             @RequestParam(required=true) String enddate, 
             @RequestParam(required=true) String location,
             @RequestParam(defaultValue = "any") String cartype){
+    	
+    	// Log Start
+    	System.out.println("bookCar : get /book was called ");
         
         long company = Long.parseLong(companyid); // convert companyid back to long
         
@@ -44,7 +47,9 @@ public class RestCarController {
         reservation.setStartdate(date1); 
         reservation.setEnddate(date2);
         reservation.setCompanyid(company);
-         
+        
+        // Log End
+        System.out.println("bookCar : get /book exited. ");
         return carService.bookPartnerReservation(reservation, cartype);
         
     }
@@ -52,11 +57,17 @@ public class RestCarController {
     @DeleteMapping("/cancel")
     public ResponseEntity<Long> removeBooking(@RequestParam(required = true) String companyid,
             @RequestParam(required = true) String reservationid) {
+    	
+    	// Log Start
+    	System.out.println("removeBooking : delete /cancel was called ");
 
         // convert the strings to long
         long coid = Long.parseLong(companyid);
         long rid = Long.parseLong(reservationid);
-
+        
+        // Log End
+        System.out.println("removeBooking : delete /cancel exited. ");
+        
         return carService.cancelPartnerReservation(coid, rid);
 
     }
