@@ -14,9 +14,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cst438.car.domain.*;
 
@@ -41,18 +44,22 @@ public class CarServiceTest {
     
     @MockBean
     private ReservationRepository mockReservationRepository;
+    
+    @MockBean
+    private PartnerRepository mockPartnerRepository;
 
     // declare the CarService as @MockBean for unit testing
     @MockBean
     private CarService cs;
-
-    // The following method is executed before each Test.
-    @BeforeEach
-    public void setUpEach() {
-        MockitoAnnotations.initMocks(this);
-
-    }
     
+     // This method is executed before each Test.
+     @BeforeEach
+     public void setUpEach() {
+         MockitoAnnotations.initMocks(this);
+
+     }
+
+        
     // Test the function CarService.getAvailableCars
     // - test dates not overlapping with any reservations
     @Test
@@ -735,6 +742,355 @@ public class CarServiceTest {
         cs.setTotalPrice(rTest, cTest);
         
         assertThat(rTest).isEqualTo(expectedResult);
+        
+    }
+    
+    // Test the function CarService.bookPartnerReservation(Reservation, Cartype)
+    // - with the companyid is in the database, location and reservation dates are good but with Cartype="any"
+    @Test
+    public void testBookPartnerReservation_1() throws Exception {
+        
+        // create the company that match with the companyid in the reservation
+        Partner company = new Partner(99L, "TestComapany", (float)0.99);
+        List<Partner> partners = new ArrayList<Partner>();
+        partners.add(company);
+       
+        // create some car inventories for testing
+        CarType type1 = new CarType(1, "Standard");
+        CarType type2 = new CarType(2, "SUV");
+        CarType type3 = new CarType(3, "Truck");
+        CarType type4 = new CarType(4, "Van");
+        CarType type5 = new CarType(5, "Luxury");
+        
+        // Car(long carid, String description, int maxpassengers, String location, String image,
+        //    float dailyprice, float weeklyprice, CarType cartype)
+        Car car1 = new Car(1L, "Description 1", 4, "Location10", "image1", 1, 10, type1);
+        Car car2 = new Car(2L, "Description 2", 5, "Location10", "image2", 2, 20, type2);
+        Car car3 = new Car(3L, "Description 3", 6, "Location10", "image3", 3, 30, type3);
+        Car car4 = new Car(4L, "Description 4", 7, "Location10", "image4", 4, 40, type4);
+        Car car5 = new Car(5L, "Description 5", 8, "Location10", "image5", 5, 50, type5);
+        List<Car> cars = new ArrayList<Car>();
+        cars.add(car1);
+        cars.add(car2);
+        cars.add(car3);
+        cars.add(car4);
+        cars.add(car5);
+        
+        // create empty list of reservation records for testing
+        List<Reservation> rlist = new ArrayList<Reservation>();
+        
+        
+        
+        // Initiate a CarService object wit mock repositories
+        cs = new CarService(mockCarRepository, mockUserRepository, mockReservationRepository, mockPartnerRepository);
+
+        // this is the stub for PartnerRepository
+        given(mockPartnerRepository.findByCompanyid(99L)).willReturn(partners);
+        
+        // this is the stub for CarRepository
+        // When given location = "Location10", it will return a list of cars at location 10
+        given(mockCarRepository.findByLocationIgnoreCase("Location10")).willReturn(cars);
+
+        // this is the stub for the ReservationRepository. 
+        // When given input carid=1 to 5 , it will return an empty list
+        // because we are testing the overlapping dates
+        given(mockReservationRepository.findByCarid(1L)).willReturn(rlist);
+        given(mockReservationRepository.findByCarid(2L)).willReturn(rlist);
+        given(mockReservationRepository.findByCarid(3L)).willReturn(rlist);
+        given(mockReservationRepository.findByCarid(4L)).willReturn(rlist);
+        given(mockReservationRepository.findByCarid(5L)).willReturn(rlist);
+      
+        // Create a reservation with only the location, start date and end date specified
+        // no overlapping dates
+        // create a reservation as input parameter to the bookPartnerReservation
+        // Reservation(long reserveid, long carid, Date startdate, Date enddate, long userid,
+        // long companyid, float totalprice, String location)
+        Reservation reservation = new Reservation();
+        reservation.setReserveid(0L);
+        reservation.setCompanyid(99L);
+        reservation.setStartdate(Date.valueOf("2021-12-01"));
+        reservation.setEnddate(Date.valueOf("2021-12-6"));
+        reservation.setLocation("Location10");
+        
+        given(mockReservationRepository.save(reservation)).willReturn(reservation);
+        
+        String type = "any";
+        
+        ReserveInfo reserveInfo = new ReserveInfo(0L, "Standard", "Description 1", (float)5.0);
+        
+                
+        ResponseEntity<ReserveInfo> testResultResponse = cs.bookPartnerReservation(reservation, type);
+        
+        ReserveInfo testResult = testResultResponse.getBody();
+
+        ReserveInfo expectedResult = reserveInfo;
+
+        // first verify the http status response code is as expected
+        assertThat(testResultResponse.getStatusCodeValue()).isEqualTo(HttpStatus.OK.value());
+        
+        assertThat(testResult).isEqualTo(expectedResult);
+        
+    }
+    
+ // Test the function CarService.bookPartnerReservation(Reservation, Cartype)
+    // - with the companyid is in the database, location and reservation dates are good but with Cartype="truck"
+    @Test
+    public void testBookPartnerReservation_2() throws Exception {
+        
+        // create the company that match with the companyid in the reservation
+        Partner company = new Partner(99L, "TestComapany", (float)0.99);
+        List<Partner> partners = new ArrayList<Partner>();
+        partners.add(company);
+       
+        // create some car inventories for testing
+        CarType type1 = new CarType(1, "Standard");
+        CarType type2 = new CarType(2, "SUV");
+        CarType type3 = new CarType(3, "Truck");
+        CarType type4 = new CarType(4, "Van");
+        CarType type5 = new CarType(5, "Luxury");
+        
+        // Car(long carid, String description, int maxpassengers, String location, String image,
+        //    float dailyprice, float weeklyprice, CarType cartype)
+        Car car1 = new Car(1L, "Description 1", 4, "Location10", "image1", 1, 10, type1);
+        Car car2 = new Car(2L, "Description 2", 5, "Location10", "image2", 2, 20, type2);
+        Car car3 = new Car(3L, "Description 3", 6, "Location10", "image3", 3, 30, type3);
+        Car car4 = new Car(4L, "Description 4", 7, "Location10", "image4", 4, 40, type4);
+        Car car5 = new Car(5L, "Description 5", 8, "Location10", "image5", 5, 50, type5);
+        List<Car> cars = new ArrayList<Car>();
+        cars.add(car1);
+        cars.add(car2);
+        cars.add(car3);
+        cars.add(car4);
+        cars.add(car5);
+        
+        // create empty list of reservation records for testing
+        List<Reservation> rlist = new ArrayList<Reservation>();
+        
+        
+        
+        // Initiate a CarService object wit mock repositories
+        cs = new CarService(mockCarRepository, mockUserRepository, mockReservationRepository, mockPartnerRepository);
+
+        // this is the stub for PartnerRepository
+        given(mockPartnerRepository.findByCompanyid(99L)).willReturn(partners);
+        
+        // this is the stub for CarRepository
+        // When given location = "Location10", it will return a list of cars at location 10
+        given(mockCarRepository.findByLocationIgnoreCase("Location10")).willReturn(cars);
+
+        // this is the stub for the ReservationRepository. 
+        // When given input carid=1 to 5 , it will return an empty list
+        // because we are testing the overlapping dates
+        given(mockReservationRepository.findByCarid(1L)).willReturn(rlist);
+        given(mockReservationRepository.findByCarid(2L)).willReturn(rlist);
+        given(mockReservationRepository.findByCarid(3L)).willReturn(rlist);
+        given(mockReservationRepository.findByCarid(4L)).willReturn(rlist);
+        given(mockReservationRepository.findByCarid(5L)).willReturn(rlist);
+      
+        // Create a reservation with only the location, start date and end date specified
+        // no overlapping dates
+        // create a reservation as input parameter to the bookPartnerReservation
+        // Reservation(long reserveid, long carid, Date startdate, Date enddate, long userid,
+        // long companyid, float totalprice, String location)
+        Reservation reservation = new Reservation();
+        reservation.setReserveid(0L);
+        reservation.setCompanyid(99L);
+        reservation.setStartdate(Date.valueOf("2021-12-01"));
+        reservation.setEnddate(Date.valueOf("2021-12-6"));
+        reservation.setLocation("Location10");
+        
+        given(mockReservationRepository.save(reservation)).willReturn(reservation);
+        
+        String type = "truck";
+        
+        ReserveInfo reserveInfo = new ReserveInfo(0L, "Truck", "Description 3", (float)15.0);
+        
+                
+        ResponseEntity<ReserveInfo> testResultResponse = cs.bookPartnerReservation(reservation, type);
+        
+        ReserveInfo testResult = testResultResponse.getBody();
+
+        ReserveInfo expectedResult = reserveInfo;
+
+        // first verify the http status response code is as expected
+        assertThat(testResultResponse.getStatusCodeValue()).isEqualTo(HttpStatus.OK.value());
+        
+        assertThat(testResult).isEqualTo(expectedResult);
+        
+    }
+    
+    
+    // Test the function CarService.bookPartnerReservation(Reservation, Cartype)
+    // - with the companyid is in the database, location and reservation dates are good but with Cartype="xxx"
+    @Test
+    public void testBookPartnerReservation_3() throws Exception {
+        
+        // create the company that match with the companyid in the reservation
+        Partner company = new Partner(99L, "TestComapany", (float)0.99);
+        List<Partner> partners = new ArrayList<Partner>();
+        partners.add(company);
+       
+        // create some car inventories for testing
+        CarType type1 = new CarType(1, "Standard");
+        CarType type2 = new CarType(2, "SUV");
+        CarType type3 = new CarType(3, "Truck");
+        CarType type4 = new CarType(4, "Van");
+        CarType type5 = new CarType(5, "Luxury");
+        
+        // Car(long carid, String description, int maxpassengers, String location, String image,
+        //    float dailyprice, float weeklyprice, CarType cartype)
+        Car car1 = new Car(1L, "Description 1", 4, "Location10", "image1", 1, 10, type1);
+        Car car2 = new Car(2L, "Description 2", 5, "Location10", "image2", 2, 20, type2);
+        Car car3 = new Car(3L, "Description 3", 6, "Location10", "image3", 3, 30, type3);
+        Car car4 = new Car(4L, "Description 4", 7, "Location10", "image4", 4, 40, type4);
+        Car car5 = new Car(5L, "Description 5", 8, "Location10", "image5", 5, 50, type5);
+        List<Car> cars = new ArrayList<Car>();
+        cars.add(car1);
+        cars.add(car2);
+        cars.add(car3);
+        cars.add(car4);
+        cars.add(car5);
+        
+        // create empty list of reservation records for testing
+        List<Reservation> rlist = new ArrayList<Reservation>();
+        
+        
+        
+        // Initiate a CarService object wit mock repositories
+        cs = new CarService(mockCarRepository, mockUserRepository, mockReservationRepository, mockPartnerRepository);
+
+        // this is the stub for PartnerRepository
+        given(mockPartnerRepository.findByCompanyid(99L)).willReturn(partners);
+        
+        // this is the stub for CarRepository
+        // When given location = "Location10", it will return a list of cars at location 10
+        given(mockCarRepository.findByLocationIgnoreCase("Location10")).willReturn(cars);
+
+        // this is the stub for the ReservationRepository. 
+        // When given input carid=1 to 5 , it will return an empty list
+        // because we are testing the overlapping dates
+        given(mockReservationRepository.findByCarid(1L)).willReturn(rlist);
+        given(mockReservationRepository.findByCarid(2L)).willReturn(rlist);
+        given(mockReservationRepository.findByCarid(3L)).willReturn(rlist);
+        given(mockReservationRepository.findByCarid(4L)).willReturn(rlist);
+        given(mockReservationRepository.findByCarid(5L)).willReturn(rlist);
+      
+        // Create a reservation with only the location, start date and end date specified
+        // no overlapping dates
+        // create a reservation as input parameter to the bookPartnerReservation
+        // Reservation(long reserveid, long carid, Date startdate, Date enddate, long userid,
+        // long companyid, float totalprice, String location)
+        Reservation reservation = new Reservation();
+        reservation.setReserveid(0L);
+        reservation.setCompanyid(99L);
+        reservation.setStartdate(Date.valueOf("2021-12-01"));
+        reservation.setEnddate(Date.valueOf("2021-12-6"));
+        reservation.setLocation("Location10");
+        
+        given(mockReservationRepository.save(reservation)).willReturn(reservation);
+        
+        String type = "xxx";
+        
+        ReserveInfo reserveInfo = null;
+        
+                
+        ResponseEntity<ReserveInfo> testResultResponse = cs.bookPartnerReservation(reservation, type);
+        
+        ReserveInfo testResult = testResultResponse.getBody();
+
+        ReserveInfo expectedResult = reserveInfo;
+
+        // first verify the http status response code is as expected
+        assertThat(testResultResponse.getStatusCodeValue()).isEqualTo(HttpStatus.NO_CONTENT.value());
+        
+        assertThat(testResult).isEqualTo(expectedResult);
+        
+    }
+    
+    // Test the function CarService.bookPartnerReservation(Reservation, Cartype)
+    // - with the companyid is not in the database
+    @Test
+    public void testBookPartnerReservation_4() throws Exception {
+        
+        // create the company that match with the companyid in the reservation
+        Partner company = new Partner(99L, "TestComapany", (float)0.99);
+        List<Partner> partners = new ArrayList<Partner>();
+        partners.add(company);
+       
+        // create some car inventories for testing
+        CarType type1 = new CarType(1, "Standard");
+        CarType type2 = new CarType(2, "SUV");
+        CarType type3 = new CarType(3, "Truck");
+        CarType type4 = new CarType(4, "Van");
+        CarType type5 = new CarType(5, "Luxury");
+        
+        // Car(long carid, String description, int maxpassengers, String location, String image,
+        //    float dailyprice, float weeklyprice, CarType cartype)
+        Car car1 = new Car(1L, "Description 1", 4, "Location10", "image1", 1, 10, type1);
+        Car car2 = new Car(2L, "Description 2", 5, "Location10", "image2", 2, 20, type2);
+        Car car3 = new Car(3L, "Description 3", 6, "Location10", "image3", 3, 30, type3);
+        Car car4 = new Car(4L, "Description 4", 7, "Location10", "image4", 4, 40, type4);
+        Car car5 = new Car(5L, "Description 5", 8, "Location10", "image5", 5, 50, type5);
+        List<Car> cars = new ArrayList<Car>();
+        cars.add(car1);
+        cars.add(car2);
+        cars.add(car3);
+        cars.add(car4);
+        cars.add(car5);
+        
+        // create empty list of reservation records for testing
+        List<Reservation> rlist = new ArrayList<Reservation>();
+        
+        
+        
+        // Initiate a CarService object wit mock repositories
+        cs = new CarService(mockCarRepository, mockUserRepository, mockReservationRepository, mockPartnerRepository);
+
+        // this is the stub for PartnerRepository
+        given(mockPartnerRepository.findByCompanyid(99L)).willReturn(new ArrayList<Partner>());
+        
+        // this is the stub for CarRepository
+        // When given location = "Location10", it will return a list of cars at location 10
+        given(mockCarRepository.findByLocationIgnoreCase("Location10")).willReturn(cars);
+
+        // this is the stub for the ReservationRepository. 
+        // When given input carid=1 to 5 , it will return an empty list
+        // because we are testing the overlapping dates
+        given(mockReservationRepository.findByCarid(1L)).willReturn(rlist);
+        given(mockReservationRepository.findByCarid(2L)).willReturn(rlist);
+        given(mockReservationRepository.findByCarid(3L)).willReturn(rlist);
+        given(mockReservationRepository.findByCarid(4L)).willReturn(rlist);
+        given(mockReservationRepository.findByCarid(5L)).willReturn(rlist);
+      
+        // Create a reservation with only the location, start date and end date specified
+        // no overlapping dates
+        // create a reservation as input parameter to the bookPartnerReservation
+        // Reservation(long reserveid, long carid, Date startdate, Date enddate, long userid,
+        // long companyid, float totalprice, String location)
+        Reservation reservation = new Reservation();
+        reservation.setReserveid(0L);
+        reservation.setCompanyid(99L);
+        reservation.setStartdate(Date.valueOf("2021-12-01"));
+        reservation.setEnddate(Date.valueOf("2021-12-6"));
+        reservation.setLocation("Location10");
+        
+        given(mockReservationRepository.save(reservation)).willReturn(reservation);
+        
+        String type = "any";
+        
+        ReserveInfo reserveInfo = null;
+        
+                
+        ResponseEntity<ReserveInfo> testResultResponse = cs.bookPartnerReservation(reservation, type);
+        
+        ReserveInfo testResult = testResultResponse.getBody();
+
+        ReserveInfo expectedResult = reserveInfo;
+
+        // first verify the http status response code is as expected
+        assertThat(testResultResponse.getStatusCodeValue()).isEqualTo(HttpStatus.NOT_FOUND.value());
+        
+        assertThat(testResult).isEqualTo(expectedResult);
         
     }
 }
