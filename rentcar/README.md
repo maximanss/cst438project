@@ -12,7 +12,7 @@ https://maha20-car-rental.herokuapp.com/
 ### GET /book
 This allows to book a reservation with the company id, start and end date of the rental, and the location of where it will be used. Cartype is defaulted to a two seated vehicle minimum (standard). Please use cartype=${cartype} for specific models. The available ones are luxury, suv, truck, and van.
 ```
-https://maha20-car-rental.herokuapp.com/book?startdate=yyyy-mm-dd&enddate=yyyy-mm-dd&location=${location}
+https://maha20-car-rental.herokuapp.com/api/book?companyid=${id}&startdate=yyyy-mm-dd&enddate=yyyy-mm-dd&location=${location}
 ```
 
 ```
@@ -29,7 +29,7 @@ https://maha20-car-rental.herokuapp.com/book?startdate=yyyy-mm-dd&enddate=yyyy-m
 This allows the deletion of a reservation with the company id and reservation id. 
 
 ```
-https://maha20-car-rental.herokuapp.com/api/cancel?companyid=1&reservationid=22
+https://maha20-car-rental.herokuapp.com/api/cancel?companyid=1&reservationid=35
 ```
 
 # Database Design
