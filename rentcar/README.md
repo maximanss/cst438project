@@ -4,13 +4,13 @@
 This application was created to allow a user to enter a date and location to book a car rental after logging into the application. A user is able to register by navigating to "register" on the nav bar. After their information is entered, a user is then able to login and select a date and location to rent a car. A car selection can be made, and finally a summary will be displayed of their reservation. 
 
 
-# REST API
+# REST API for partner company
 ```
 https://maha20-car-rental.herokuapp.com/
 ```
 
 ### GET /book
-This allows to book a reservation with the company id, start and end date of the rental, and the location of where it will be used. Cartype is defaulted to a two seated vehicle minimum (standard). Please use cartype=${cartype} for specific models. The available ones are luxury, suv, truck, and van.
+This allows to book a reservation with the company id (either 1 or 2), start and end date of the rental, and the location (Boston, Las Vegas, San Diego or San Francisco) of where it will be used. Cartype is defaulted to a two seated vehicle minimum (standard). Please use cartype=${cartype} for specific models. The available ones are luxury, suv, truck, and van.
 ```
 https://maha20-car-rental.herokuapp.com/api/book?companyid=${id}&startdate=yyyy-mm-dd&enddate=yyyy-mm-dd&location=${location}
 ```
